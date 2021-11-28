@@ -1,10 +1,13 @@
-\documentclass[a5paper,twoside]{scrbook}
+\documentclass[a5paper,BCOR=12mm,german]{scrbook}
+
+\usepackage{chochbuech}
+
 \begin{document}
-    \title{Eine drachoche}
-    \author{Schärmu}
+    \title{Eine drachoche mitem Schärmu}
+    \author{Stefan Schärmeli}
     \frontmatter
     \maketitle
     \tableofcontents
     \mainmatter
-    \chapter{Italien}
+    \import{chapters/}{italien.tex}
 \end{document}

@@ -1,0 +1,79 @@
+\ProvidesPackage{chochbuech}
+
+\usepackage[index,nonumber,contents]{cuisine}
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{eso-pic}
+\usepackage[automark]{scrlayer-scrpage}
+\usepackage{import}
+\usepackage{titling}
+\usepackage{pdfpages}
+\usepackage{xpatch}
+\usepackage[german]{babel}
+\usepackage{geometry}
+% Show crop marks
+\usepackage[
+  noinfo,
+  cam,
+  cross,
+  width=158mm,
+  height=220mm,
+  center
+]{crop}
+
+% Configure header
+\clearpairofpagestyles
+\ihead{\leftmark}
+\ohead{\thetitle}
+\cfoot*{\pagemark}
+\ofoot*{}
+
+% Configure cuisine package
+\RecipeWidths{\textwidth}{2cm}{0mm}{2cm}{1.5cm}{1cm}
+\xpatchcmd{\Displ@ySt@p}{\arabic{st@pnumber}}{}{}{}
+\renewcommand*{\recipetitlefont}{\large\bfseries\sffamily}
+\renewcommand*{\recipeingredientfont}{\bfseries\sffamily}
+\renewcommand*{\recipemethodfont}{\sffamily}
+\renewcommand*{\recipefreeformfont}{\sffamily}
+
+\graphicspath{
+    {images/}
+}
+
+\renewcommand*\chapterpagestyle{scrheadings}
+
+\RedeclareSectionCommand[
+  beforeskip=0pt,
+  %innerskip=0pt,
+  afterskip=1\baselineskip
+]{chapter}
+
+% Define custom command for chapter titles
+\newcommand*{\picturechapter}[2]{%
+  \thispagestyle{empty}
+  \AddToShipoutPictureBG*{
+      \AtPageUpperLeft {
+        \raisebox{-\height+5mm}{
+            \hspace*{-10mm}
+            \includegraphics[width=\pdfpagewidth]{#2}
+        }
+      }
+  }
+  \begin{tikzpicture}[remember picture, overlay]
+    \node[
+        anchor=west,
+        fill=white,
+        fill opacity=0.8,
+        align=flush center,
+        text width=\paperwidth + 10mm,
+        minimum height=3cm,
+        font=\Huge\sffamily
+    ] at ([shift={(-8mm, 0)}]current page.west) (title) {#1};
+  \end{tikzpicture}
+
+  \refstepcounter{chapter}
+  \addcontentsline{toc}{chapter}{#1}
+  \chaptermark{#1}
+  \cleardoublepage
+}
