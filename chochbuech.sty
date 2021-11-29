@@ -1,6 +1,7 @@
 \ProvidesPackage{chochbuech}
 
 \usepackage[index,nonumber,contents]{cuisine}
+\usepackage{awesomebox}
 \usepackage{microtype}
 \usepackage{graphicx}
 \usepackage{tikz}
@@ -22,32 +23,45 @@
   center
 ]{crop}
 
+% Set defaults
+\renewcommand{\familydefault}{\sfdefault}
+
 % Configure header
 \clearpairofpagestyles
-\ihead{\leftmark}
+\ihead{}
 \ohead{\thetitle}
 \cfoot*{\pagemark}
 \ofoot*{}
 
 % Configure cuisine package
-\RecipeWidths{\textwidth}{2cm}{0mm}{2cm}{1.5cm}{1cm}
+\RecipeWidths{\textwidth}{2cm}{0cm}{4.5cm}{0cm}{0cm}
 \xpatchcmd{\Displ@ySt@p}{\arabic{st@pnumber}}{}{}{}
-\renewcommand*{\recipetitlefont}{\large\bfseries\sffamily}
-\renewcommand*{\recipeingredientfont}{\bfseries\sffamily}
-\renewcommand*{\recipemethodfont}{\sffamily}
-\renewcommand*{\recipefreeformfont}{\sffamily}
+\renewcommand*{\recipetitlefont}{\Large\bfseries}
+
+% Custom environment for recipes
+\newenvironment{myrecipe}[5]{
+  \extrafootertext{#5}
+  \begin{recipe}[#1]{#1}{#2}{#3}
+      \freeform
+      \hspace*{-3cm}
+      \tikz\node[
+          rectangle,
+          draw=none,
+          text=white,
+          minimum width=\paperwidth + 2cm,
+          minimum height=5cm,
+          path picture={
+              \node at (path picture bounding box.center) {
+                  \includegraphics[width=\paperwidth + 2cm]{#4}
+              };
+          }]{};
+}{\end{recipe}}
 
 \graphicspath{
     {images}
 }
 
 \renewcommand*\chapterpagestyle{scrheadings}
-
-\RedeclareSectionCommand[
-  beforeskip=0pt,
-  %innerskip=0pt,
-  afterskip=1\baselineskip
-]{chapter}
 
 % Define custom command for chapter titles
 \newcommand*{\picturechapter}[2]{%
@@ -76,4 +90,12 @@
   \addcontentsline{toc}{chapter}{#1}
   \chaptermark{#1}
   \cleardoublepage
+}
+
+\newcommand\extrafootertext[1]{%
+    \bgroup
+    \renewcommand\thefootnote{\fnsymbol{footnote}}%
+    \renewcommand\thempfootnote{\fnsymbol{mpfootnote}}%
+    \footnotetext[0]{#1}%
+    \egroup
 }

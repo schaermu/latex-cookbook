@@ -1,0 +1,1 @@
+{"rule":"GERMAN_WORD_REPEAT_RULE","sentence":"^\\QItalien italien_titel.jpg\\E$"}
