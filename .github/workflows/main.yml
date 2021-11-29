@@ -6,6 +6,11 @@ jobs:
     steps:
       - name: Set up Git repository
         uses: actions/checkout@v2
+        with:
+          lfs: true
+
+      - name: Checkout LFS objects
+        run: git lfs checkout
         
       - name: Compile LaTeX document
         uses: xu-cheng/latex-action@v2
